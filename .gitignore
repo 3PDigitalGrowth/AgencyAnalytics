@@ -1,0 +1,25 @@
+# deps
+node_modules
+.pnp
+.pnp.js
+
+# build
+.next/
+out/
+dist/
+
+# env
+.env
+.env.local
+.env.production
+
+# debug
+npm-debug.log*
+
+# misc
+.DS_Store
+*.pem
+.vercel
+
+# prisma
+prisma/migrations/dev.db
