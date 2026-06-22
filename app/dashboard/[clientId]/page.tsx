@@ -16,6 +16,7 @@ export default function OverviewPage({ params }: OverviewPageProps) {
   const [gaData, setGaData] = useState<any>(null);
   const [metaData, setMetaData] = useState<any>(null);
   const [gadsData, setGadsData] = useState<any>(null);
+  const [clarityData, setClarityData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const range = "28d";
 
@@ -23,16 +24,18 @@ export default function OverviewPage({ params }: OverviewPageProps) {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const [gsc, ga, meta, gads] = await Promise.allSettled([
+        const [gsc, ga, meta, gads, clarity] = await Promise.allSettled([
           fetch(`/api/gsc?clientId=${clientId}&range=${range}`).then(r => r.json()),
           fetch(`/api/ga?clientId=${clientId}&range=${range}`).then(r => r.json()),
           fetch(`/api/meta?clientId=${clientId}&range=${range}`).then(r => r.json()),
           fetch(`/api/gads?clientId=${clientId}&range=${range}`).then(r => r.json()),
+          fetch(`/api/clarity?clientId=${clientId}&days=3`).then(r => r.ok ? r.json() : null),
         ]);
         if (gsc.status === "fulfilled") setGscData(gsc.value);
         if (ga.status === "fulfilled") setGaData(ga.value);
         if (meta.status === "fulfilled") setMetaData(meta.value);
         if (gads.status === "fulfilled") setGadsData(gads.value);
+        if (clarity.status === "fulfilled") setClarityData(clarity.value);
       } finally {
         setLoading(false);
       }
@@ -116,7 +119,7 @@ export default function OverviewPage({ params }: OverviewPageProps) {
           <ChannelBadge channel="gads" connected={!!gadsData} />
           <ChannelBadge channel="meta" connected={!!metaData} />
           <ChannelBadge channel="gbp" connected={false} />
-          <ChannelBadge channel="clarity" connected={false} />
+          <ChannelBadge channel="clarity" connected={!!clarityData} />
         </div>
       </div>
     </div>
