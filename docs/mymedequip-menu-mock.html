@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MyMedEquip — Menu CRO Mock (Before / After)</title>
+<style>
+  :root{
+    --ink:#0e1116; --muted:#5b6470; --line:#e3e7ec; --bg:#f4f6f8;
+    --cyan:#16b6e4; --cyan-d:#0e93b8; --black:#0b0d10;
+    --bad:#e23b3b; --bad-bg:#fdecec; --good:#1a9e57; --good-bg:#e8f6ee;
+    --warn:#d98a00; --warn-bg:#fdf3e0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  .wrap{max-width:1180px;margin:0 auto;padding:32px 24px 64px}
+  h1{font-size:24px;margin:0 0 4px;letter-spacing:-.02em}
+  .sub{color:var(--muted);margin:0 0 28px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:36px 0 14px;font-weight:700}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(16,22,30,.04)}
+
+  /* ---- Browser-ish header chrome ---- */
+  .util{background:var(--black);color:#fff;text-align:center;font-size:12px;padding:7px}
+  .util b{font-weight:600}
+  .bar{display:flex;align-items:center;gap:18px;padding:14px 22px;background:#fff;border-bottom:1px solid var(--line)}
+  .logo{font-weight:800;letter-spacing:-.02em;font-size:20px;white-space:nowrap}
+  .logo .c{color:var(--cyan)}
+  .search{flex:1;display:flex;align-items:center;border:1.5px solid #d7dde3;border-radius:8px;overflow:hidden;max-width:560px}
+  .search .scope{padding:9px 12px;border-right:1px solid #e3e7ec;color:var(--muted);font-size:13px;white-space:nowrap}
+  .search input{flex:1;border:0;padding:9px 12px;font-size:14px;outline:none}
+  .icons{display:flex;gap:16px;color:var(--muted);font-size:13px;margin-left:auto}
+  .icons span{display:inline-flex;align-items:center;gap:5px}
+
+  nav.menu{display:flex;gap:6px;padding:0 22px;background:#fff;flex-wrap:wrap}
+  nav.menu a{padding:13px 14px;font-weight:600;font-size:14.5px;color:var(--ink);text-decoration:none;border-bottom:3px solid transparent;position:relative}
+  nav.menu a .ca{font-size:10px;color:var(--muted);margin-left:4px}
+  .promo{background:var(--cyan);color:#fff;text-align:center;font-weight:800;letter-spacing:.18em;font-size:12px;padding:8px}
+
+  /* badges on nav items */
+  .b-bad{background:var(--bad-bg);outline:2px solid var(--bad);border-radius:6px}
+  .b-good{background:var(--good-bg);outline:2px solid var(--good);border-radius:6px}
+  .b-warn{background:var(--warn-bg);outline:2px solid var(--warn);border-radius:6px}
+  .tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;letter-spacing:.04em;padding:1px 6px;border-radius:999px;color:#fff;white-space:nowrap}
+  .tag.bad{background:var(--bad)} .tag.good{background:var(--good)} .tag.warn{background:var(--warn)} .tag.new{background:var(--cyan-d)}
+
+  /* tile row */
+  .tiles{display:flex;gap:10px;padding:16px 22px;flex-wrap:wrap;background:#fbfcfd;border-top:1px solid var(--line)}
+  .tile{flex:1;min-width:120px;text-align:center;font-size:12px;font-weight:700;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 8px}
+  .tile small{display:block;color:var(--muted);font-weight:500;margin-top:3px;font-size:10.5px}
+
+  /* mega menu preview */
+  .mega{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:18px 22px;border-top:1px dashed #cfd6dd;background:#fafcfe}
+  .mega h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--cyan-d)}
+  .mega ul{margin:0;padding:0;list-style:none}
+  .mega li{padding:4px 0;color:var(--ink);font-size:13px}
+  .mega li:before{content:"›";color:var(--muted);margin-right:7px}
+
+  /* annotation callouts */
+  .notes{margin:14px 0 0;display:grid;gap:8px}
+  .note{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;background:#fff;border:1px solid var(--line);border-left-width:4px;border-radius:8px;padding:10px 12px}
+  .note.bad{border-left-color:var(--bad)} .note.good{border-left-color:var(--good)} .note.warn{border-left-color:var(--warn)}
+  .note .k{font-weight:800;font-size:11px;padding:2px 7px;border-radius:6px;white-space:nowrap;margin-top:1px}
+  .note.bad .k{background:var(--bad-bg);color:var(--bad)} .note.good .k{background:var(--good-bg);color:var(--good)} .note.warn .k{background:var(--warn-bg);color:var(--warn)}
+  .ph{background:#fff7d6;border:1px dashed #d9b400;border-radius:5px;padding:0 5px;font-size:12px;font-weight:700;color:#7a6200}
+
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0 0;font-size:12.5px;color:var(--muted)}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .foot{margin-top:34px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+  code{background:#eef1f4;padding:1px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>MyMedEquip — Homepage Menu CRO Mock</h1>
+  <p class="sub">Before / After of the primary navigation · prepared by 3P Digital · <span class="ph">live Clarity figures pending egress</span></p>
+
+  <div class="legend">
+    <span><i style="background:var(--bad)"></i>Cut / problem</span>
+    <span><i style="background:var(--warn)"></i>Demote / merge</span>
+    <span><i style="background:var(--good)"></i>Keep / promote</span>
+    <span><i style="background:var(--cyan-d)"></i>New top-level</span>
+    <span><span class="ph">xx%</span> = drop-in Clarity metric</span>
+  </div>
+
+  <!-- ============ BEFORE ============ -->
+  <h2>Before — current navigation (captured 2026-06-24)</h2>
+  <div class="panel">
+    <div class="util"><b>Australia (AUD $)</b> ▾</div>
+    <div class="bar">
+      <div class="logo">MY<span class="c">MED</span>EQUIP</div>
+      <div class="search"><span class="scope">All ▾</span><input placeholder="Search for…" disabled></div>
+      <div class="icons"><span>👤 Account</span><span>🛒 Cart (1)</span></div>
+    </div>
+    <nav class="menu">
+      <a class="b-bad"><span class="tag bad">PRIME SLOT · LOW INTENT</span>Books &amp; Reference Cards<span class="ca">▾</span></a>
+      <a class="b-bad"><span class="tag bad">PRIME SLOT · LOW INTENT</span>Boots Bags &amp; Apparel<span class="ca">▾</span></a>
+      <a class="b-warn"><span class="tag warn">CATCH-ALL · OVERLAP</span>Supplies &amp; Equipment<span class="ca">▾</span></a>
+      <a class="b-good"><span class="tag good">CORE</span>First Aid Kits<span class="ca">▾</span></a>
+      <a class="b-warn"><span class="tag warn">MIXED AXIS</span>Simulation &amp; Training</a>
+      <a class="b-warn"><span class="tag warn">CONTENT</span>Resource Vault<span class="ca">▾</span></a>
+      <a>Contact Us</a>
+    </nav>
+    <div class="promo">EMPOWERING LIFESAVERS</div>
+    <div class="tiles">
+      <div class="tile">Survival Kits</div>
+      <div class="tile" style="outline:2px solid var(--bad)">Blood Control Consumables<small>★ hero category — not in menu</small></div>
+      <div class="tile" style="outline:2px solid var(--warn)">Trauma Shears &amp; Tools<small>label ≠ menu</small></div>
+      <div class="tile" style="outline:2px solid var(--warn)">Reference Books &amp; Cards<small>"Books &amp; Reference Cards" in menu</small></div>
+      <div class="tile" style="outline:2px solid var(--warn)">Paramedic Boots &amp; Footwear<small>"Boots Bags &amp; Apparel" in menu</small></div>
+      <div class="tile">Student Kits</div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note bad"><span class="k">F1</span><div><b>Prime real-estate misallocated.</b> The two left-most (highest-attention) slots go to niche lines — Books, Boots/Apparel — while core categories sit further right. <span class="ph">Books/Boots click share ▸ __%</span> vs <span class="ph">Kits/Supplies ▸ __%</span></div></div>
+    <div class="note bad"><span class="k">F2</span><div><b>Best-selling category has no front door.</b> The homepage leads with bleed control / trauma (TRUST tourniquet hero, "best-selling tourniquet", Blood Control News) — yet there's <b>no top-level Bleed Control menu item</b>; it's buried in Supplies &amp; Equipment.</div></div>
+    <div class="note warn"><span class="k">F3</span><div><b>Two nav systems, mismatched labels.</b> Menu vs hero tiles disagree on wording for the same products (Books &amp; Reference Cards ↔ Reference Books &amp; Cards; Boots Bags &amp; Apparel ↔ Paramedic Boots &amp; Footwear). Splits click signal. <span class="ph">tile-vs-menu split ▸ __</span></div></div>
+    <div class="note warn"><span class="k">F4</span><div><b>Catch-all overlap.</b> Supplies &amp; Equipment overlaps Kits + trauma tiles → 3+ entry points for one product → dead clicks. <span class="ph">header dead-click rate ▸ __%</span></div></div>
+  </div>
+
+  <!-- ============ AFTER ============ -->
+  <h2>After — proposed 6-item, intent-ranked spine</h2>
+  <div class="panel">
+    <div class="util"><b>Australia (AUD $)</b> ▾</div>
+    <div class="bar">
+      <div class="logo">MY<span class="c">MED</span>EQUIP</div>
+      <div class="search" style="outline:2px solid var(--good);max-width:620px"><span class="scope">All ▾</span><input placeholder="Search for…" disabled></div>
+      <div class="icons"><span>👤 Account</span><span>🛒 Cart (1)</span></div>
+    </div>
+    <nav class="menu">
+      <a class="b-good"><span class="tag good">CORE · #1</span>First Aid Kits<span class="ca">▾</span></a>
+      <a class="b-good" style="outline-color:var(--cyan-d);background:#e6f7fd"><span class="tag new">NEW · PROMOTED</span>Bleed Control &amp; Trauma<span class="ca">▾</span></a>
+      <a class="b-good"><span class="tag good">+ Simulation</span>Supplies &amp; Equipment<span class="ca">▾</span></a>
+      <a class="b-good">Apparel &amp; Bags<span class="ca">▾</span></a>
+      <a class="b-good"><span class="tag good">+ Books · Blog</span>Resources<span class="ca">▾</span></a>
+      <a>Bulk &amp; Corporate</a>
+    </nav>
+    <div class="promo">EMPOWERING LIFESAVERS</div>
+    <!-- mega menu example for the promoted category -->
+    <div class="mega">
+      <div><h4>Bleed Control &amp; Trauma ▾ (example)</h4></div>
+      <div><ul><li>Tourniquets</li><li>Haemostatics &amp; Dressings</li></ul></div>
+      <div><ul><li>Chest Seals</li><li>Trauma Shears &amp; Tools</li></ul></div>
+      <div><ul><li><b>★ Shop all bleed control</b></li><li>Best-sellers</li></ul></div>
+    </div>
+    <div class="tiles">
+      <div class="tile" style="outline:2px solid var(--good)">First Aid Kits</div>
+      <div class="tile" style="outline:2px solid var(--good)">Bleed Control &amp; Trauma</div>
+      <div class="tile" style="outline:2px solid var(--good)">Supplies &amp; Equipment</div>
+      <div class="tile" style="outline:2px solid var(--good)">Apparel &amp; Bags</div>
+      <div class="tile" style="outline:2px solid var(--good)">Resources</div>
+      <div class="tile" style="outline:2px solid var(--good)">Bulk &amp; Corporate</div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note good"><span class="k">→F1</span><div><b>Leads with intent.</b> First Aid Kits + Bleed Control take the two prime slots; niche lines fold into parents.</div></div>
+    <div class="note good"><span class="k">→F2</span><div><b>Hero category promoted.</b> <b>Bleed Control &amp; Trauma</b> becomes its own top-level entry with a focused mega-menu — your bestseller finally has a front door.</div></div>
+    <div class="note good"><span class="k">→F3</span><div><b>One vocabulary.</b> Hero tiles now mirror the menu exactly (same labels, same destinations) — no more competing systems.</div></div>
+    <div class="note good"><span class="k">→F4/F5</span><div><b>Single product axis, 6 items.</b> Tourniquets/shears live only under Bleed Control; Simulation folds into Supplies; Books + blog into Resources; Contact → Bulk &amp; Corporate.</div></div>
+  </div>
+
+  <div class="foot">
+    Findings map to <code>docs/clarity-cro-homepage-menu.md §1</code>. Placeholders <span class="ph">__%</span> auto-fill from Clarity once <code>www.clarity.ms</code> egress is enabled (pulled via the <code>/api/clarity</code> integration). Validate the before-state click shares in the Clarity heatmap UI before shipping.
+  </div>
+</div>
+</body>
+</html>
