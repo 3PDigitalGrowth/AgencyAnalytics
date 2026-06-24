@@ -1,124 +1,123 @@
 # MyMedEquip Homepage — Menu CRO Review (Clarity-informed)
 
-_Prepared 2026-06-22 · Owner: 3P Digital · Client: **MyMedEquip** (mymedequip.com.au, Shopify store — "Empowering Lifesavers") · Hypothesis under test: the homepage primary navigation is cluttered and is costing browse-to-product / add-to-cart conversion._
+_Prepared 2026-06-24 · Owner: 3P Digital · Client: **MyMedEquip** (mymedequip.com.au, Shopify — "Empowering Lifesavers") · Reviewed against the **actual homepage** (screenshots, captured 2026-06-24)._
 
 ---
 
-## 0. Data status (read this first)
+## 0. The menu as it stands today
 
-This review could **not** be auto-backed with live numbers in the current session because:
+**Primary nav (left → right):**
+1. Books & Reference Cards ▾
+2. Boots Bags & Apparel ▾
+3. Supplies & Equipment ▾
+4. First Aid Kits ▾
+5. Simulation & Training
+6. Resource Vault ▾
+7. Contact Us
 
-| Path | Result |
-|---|---|
-| Clarity Data Export API (`project-live-insights`) | Blocked — `www.clarity.ms` not in the environment's network egress allowlist |
-| MyMedEquip homepage/sitemap scrape (to read the real menu) | Blocked — site returns HTTP 403 to automated fetchers (WAF/bot protection) across the whole domain |
+**Utility row:** Country/currency (Australia AUD $) · Logo · **Scoped search** ("All ▾" + "Search for…" + voice) · Account · Cart
+**Below nav:** "EMPOWERING LIFESAVERS" bar → rotating **USP carousel** (Free shipping >$299 · TGA Approved Kits · Subject Matter Experts · Bulk Orders)
 
-What I **could** confirm (via web search): MyMedEquip is a **Shopify storefront** selling **First Aid Kits**, **Consumables** (`/collections/consumables`), and **Paramedic/prehospital** gear, with a **first-aid blog** (`/blogs/first-aid`). Audiences span paramedics, nurses, military/tactical, rescue teams, workplaces, and everyday consumers.
+**Second navigation system on the same page:** a 6-tile category shortcut row in the hero area —
+`Survival Kits` · `Blood Control Consumables` · `Trauma Shears & Tools` · `Reference Books & Cards` · `Paramedic Boots & Footwear` · `Student Kits – Nurses & Paramedics`.
 
-**Capability note:** even with egress open, Clarity's **Data Export API does not return element-level click/heatmap data.** It returns aggregate traffic + *frustration signals* (Dead Clicks, Rage Clicks, Quick-backs, Excessive Scrolling), optionally by URL — not "how many clicked nav item X." Per-menu-item evidence lives in the Clarity **UI** (Heatmaps + Recordings), per §1.
-
-**To make this fully data-backed, pick one:**
-1. Paste the Clarity homepage figures / heatmap screenshot (fastest), **or**
-2. Add `www.clarity.ms` to egress → I'll pull the export metrics by URL via the built `/api/clarity` integration, **or**
-3. Paste the header markup (or add the Shopify theme repo) → I'll mark up and implement the real menu.
-
-Since it's Shopify, **GA4 + Clarity together** give the full picture: Clarity for *behavioural* friction (hunting, dead clicks), GA4 for *navigation→PDP→cart* funnel drop.
-
-Everything below is structured so dropping in real numbers is fill-in-the-blank, not a rewrite.
+> Data note: Clarity's Data Export API is still egress-blocked here, and it wouldn't give per-item click data anyway (that's UI-only). So the findings below are derived from the **actual menu structure** and are framed as **hypotheses to confirm** with the Clarity heatmap pulls in §3. Each is independently defensible on IA/CRO grounds.
 
 ---
 
-## 1. Confirm the clutter with Clarity (do this before changing anything)
+## 1. Findings — the menu *is* cluttered, and here's specifically why
 
-Run these in the Clarity UI for the **homepage URL**, last 28 days, segmented **Desktop vs Mobile** (mobile is where e-commerce nav clutter hurts most):
+**F1 — Prime real estate is mis-allocated to low-intent items.**
+The two **left-most** (most valuable) slots are `Books & Reference Cards` and `Boots Bags & Apparel` — niche/accessory lines. The core revenue categories `First Aid Kits` and `Supplies & Equipment` sit in positions 3–4. Left-to-right scanning + Hick's Law means you're spending your highest-attention positions on your lowest-intent categories.
 
-**A. Heatmaps → Click map (homepage)**
-- Rank header/nav items by click share. Look for:
-  - **Long tail of near-zero items** — nav links each <2% of nav clicks → demote/remove.
-  - **The 80/20** — on a store, expect `First Aid Kits`, `Consumables`, search, and cart to absorb most intent. Everything else is cognitive cost.
-- **Dead clicks on the nav** — taps on dropdown parents that aren't clickable, or mega-menu headers that look like links but aren't.
-- **Rage clicks on the nav** — repeated clicks = label/expectation mismatch or a janky/slow mega-menu.
+**F2 — Your hero/best-selling category isn't in the menu at all.**
+The homepage screams **bleed control / trauma** — featured product is the *TRUST Tactical Ratchet Tourniquet* ($199.90), a "Blood Control News" blog block, "best-selling tourniquet" copy, and a `Blood Control Consumables` hero tile. Yet there is **no top-level "Bleed Control / Trauma" menu item** — it's buried inside `Supplies & Equipment`. The single most important buying path is hidden.
 
-**B. Heatmaps → Scroll map (homepage)**
-- If a tall sticky header + announcement bar pushes hero products/CTA below the fold, note average fold vs. where "Shop"/featured products sit.
+**F3 — Two different navigation systems with mismatched labels.**
+The top menu and the hero tile row use **different taxonomies and even different words for the same thing**:
+- `Books & Reference Cards` (menu) vs `Reference Books & Cards` (tile) — same products, words reordered.
+- `Boots Bags & Apparel` (menu) vs `Paramedic Boots & Footwear` (tile).
+- `Supplies & Equipment` (menu) vs `Blood Control Consumables` / `Trauma Shears & Tools` (tiles).
+Two competing systems that don't agree is precisely the "cluttered / which way do I go?" feeling — and it splits click signal so neither path looks decisive in analytics.
 
-**C. Session recordings — filter homepage + "Rage clicks"/"Dead clicks"**
-- Watch 8–10. Look for: hovering/hunting in the mega-menu, opening a category then bouncing, **mobile users opening the hamburger and closing without selecting**, and whether shoppers default to **search** instead of the menu (a classic "menu isn't helping" tell).
+**F4 — Catch-all overlap creates ambiguity.**
+`Supplies & Equipment` overlaps `First Aid Kits`, `Blood Control Consumables`, and `Trauma Shears & Tools`. A shopper after a tourniquet has 3+ plausible entry points. Overlapping categories are the classic driver of **dead clicks and back-and-forth** (validate in §3).
 
-**D. Quantify with metrics you can also automate (Data Export, by URL)**
-- `Quick back` on homepage — clicked into a category then bounced straight back = wrong/over-promised label.
-- `Excessive scrolling` — hunting behaviour, often downstream of weak nav wayfinding.
-- `Traffic` (sessions, pages/session) on homepage — baseline for §4.
+**F5 — Mixed taxonomy axes in one bar.**
+Product categories (`First Aid Kits`, `Supplies & Equipment`) sit beside a **service/format** (`Simulation & Training`) and **content** (`Resource Vault`) and a **utility** (`Contact Us`). Four different kinds of thing flattened into one row raises cognitive load.
 
-> Fill in: Top nav items by click % ▸ ____ · Header dead-click rate ▸ ____ · Rage-click sessions on nav ▸ ____ · Mobile hamburger open→no-select ▸ ____ · % homepage sessions using search ▸ ____
+**F6 — Inconsistent grammar/grouping in labels.**
+`Boots Bags & Apparel` mashes three things with no separators; ampersand/comma usage differs item-to-item. Minor, but it adds to the "untidy" perception.
 
----
+**F7 — Vertical stack pushes the hero/CTA down.**
+Announcement bar + USP carousel + two nav rows consume significant above-the-fold height before the hero CTA. Worth checking the scroll map (§3) on mobile especially.
 
-## 2. Why a Shopify medical-supply nav tends to get cluttered
-
-MyMedEquip sells across **three product lines** (kits / consumables / paramedic) to **many use-cases** (workplace, vehicle, outdoor & survival, sports, tactical, pet, professional/prehospital). That's two competing axes — *product type* vs *use-case/audience* — plus blog, brand, and account links. Flatten them into one bar and shoppers can't form a mental model. Common failure modes:
-
-- **Two taxonomies in one row** — browsing by *product* and by *use-case* interleaved; shoppers who think "I need a **workplace** kit" can't find that path next to "Consumables".
-- **Hick's Law overload** — too many top-level choices slows every decision; >7 top-level items measurably raises time-to-first-click.
-- **Mega-menu dumping** — every collection exposed at once (Shopify themes encourage this) instead of progressive disclosure.
-- **Low-intent items in prime real estate** — `Blog`, `About`, `Our Story` sitting between high-intent `Shop`/category links.
-- **Search under-weighted** — on a catalogue store, search is a primary nav tool; if it's a small icon while the menu is overloaded, you're fighting your shoppers' preferred path.
-- **Mobile parity neglect** — the desktop overload becomes an unscannable hamburger accordion.
+**What's already good (keep):** scoped **search is prominent** (big win for a SKU-heavy store — keep it front-and-centre); trust USPs (TGA, paramedic-owned, free-shipping threshold) are strong and correctly placed.
 
 ---
 
-## 3. Recommendations — declutter, prioritized
+## 2. Recommendation — a tighter, intent-ranked menu
 
-> Re-rank against §1 click data before shipping. P1 = do first.
+Re-rank to lead with revenue/intent, surface the hero category, and fold low-intent lines into logical parents. Proposed **6-item** spine:
 
-**P1 — Cut the top-level set to 5–6 high-intent destinations.**
-Recommended spine for this catalogue:
-`First Aid Kits` · `Consumables` · `Paramedic & Pro` · `Bestsellers / Shop All` · `Resources` (blog/guides) · `About` — with a **prominent utility cluster**: **Search (expanded, not just an icon)**, Account, Cart.
-Move `Our Story`, policy, shipping, and secondary links to the **footer**.
+| # | New top-level | Rolls in (mega-menu columns) | Was |
+|---|---|---|---|
+| 1 | **First Aid Kits ▾** | Workplace/Compliant · Vehicle · Outdoor & Survival · Tactical · Student – Nurses & Paramedics · Pet | #4 → #1 |
+| 2 | **Bleed Control & Trauma ▾** _(new)_ | Tourniquets · Haemostatics & Dressings · Chest Seals · Trauma Shears & Tools | promoted out of "Supplies & Equipment" |
+| 3 | **Supplies & Equipment ▾** | Airway · Diagnostics · Consumables · Simulation & Training | absorbs #5 |
+| 4 | **Apparel & Bags ▾** | Boots & Footwear · Bags & Packs · Apparel | renamed from "Boots Bags & Apparel" |
+| 5 | **Resources ▾** | Resource Vault · Books & Reference Cards · Blood Control News (blog) | absorbs #1 & #6 |
+| 6 | **Bulk & Corporate / Contact** | Clinic, Government & Corporate orders · Contact Us | from "Contact Us" |
 
-**P1 — Make Search a first-class element, not an afterthought.**
-For a SKU-heavy store, an always-visible search box (with predictive results) often outperforms menu browsing. If §1.C shows high search usage, widen the search field and shrink the menu.
+Why this works:
+- **Leads with the two highest-intent paths** (Kits, Bleed Control) instead of Books/Boots.
+- **Promotes the hero category** (F2) to its own top-level slot — your bestseller finally has a front door.
+- **Removes the catch-all ambiguity** (F4): tourniquets/shears now live under Bleed Control, not also under Supplies.
+- **Single axis at the top** (product), with service/content demoted into parents (F5).
+- **6 items, consistent grammar** (F6).
 
-**P1 — Lead with the primary buying axis; make use-case a secondary cut.**
-Keep **product type** as the top-level spine, and expose **use-case** *inside* the `First Aid Kits` mega-menu as a clean column:
-`First Aid Kits ▸` → **Workplace/Compliant · Vehicle/Car · Outdoor & Survival · Sports · Tactical · Pet** + "Shop all kits".
-This serves the "I need a *workplace* kit" shopper without cluttering the main bar.
+**Critically — unify the two systems (F3):** make the homepage hero tiles use the **exact same labels and destinations** as the menu. One vocabulary, used everywhere. If you keep the tile row, it should mirror the 6 spine items (or the top sub-categories), not introduce a third taxonomy.
 
-**P2 — Progressive disclosure in the mega-menus.**
-`Consumables ▸` → **Trauma & Haemostatics · Airway Management · Wound Care & Dressings · Diagnostics** (4–6 groups max, clear headers, one "View all" per group). Don't list every collection flat.
+**Keep search prominent**; on mobile, pin search at the top of the hamburger and order items by the spine above.
 
-**P2 — Demote content/brand to a single "Resources" hub.**
-Roll the first-aid blog + buying guides under one `Resources` item (great for SEO and for de-risking purchases) instead of multiple content links competing with Shop.
+---
 
-**P3 — Fix what the data flags directly.**
-- Nav label with **rage clicks** → rename to match destination (label over/under-promising).
-- **Dead-click** mega-menu header → make group headers clickable to a landing collection, or visually non-interactive.
+## 3. Confirm with Clarity before shipping (maps to the findings)
 
-**P3 — Mobile: collapse to intent order.**
-Hamburger ordered by §1 click ranking; **search pinned at top**; accordions for kit/consumable subgroups; account + cart persistent; About/Resources at the bottom.
+In the Clarity **UI**, homepage, last 28 days, **Desktop vs Mobile**:
+
+- **Click map → header.** Rank the 7 items by click share. _Expect F1: Books/Boots underperform their prime position; Kits/Supplies over-index despite being further right._
+- **Click map → hero tile row.** Compare tile clicks vs menu clicks for the same categories. _Expect F3: intent split across the two systems._
+- **Dead clicks on nav + mega-menus.** _Expect F4: ambiguity around Supplies & Equipment vs Kits vs trauma._
+- **Rage clicks on nav.** Any label being clicked repeatedly = rename candidate (F3/F6).
+- **Scroll map.** Where's the average fold vs the hero CTA? (F7 — check mobile.)
+- **Session recordings** filtered to Rage/Dead clicks on homepage: watch for menu-hunting and **search-instead-of-menu** behaviour (if shoppers skip the menu for search, that's a strong "menu isn't helping" signal).
+
+**Also automatable now** (Data Export by URL, via the built `/api/clarity`): `Quick back` and `Excessive scrolling` per top collection — high `Quick back` on a category = label over-promising.
+
+> Fill in: Books/Boots click share ▸ ____ · Kits/Supplies click share ▸ ____ · tile-vs-menu split ▸ ____ · header dead-click rate ▸ ____ · % homepage sessions using search ▸ ____ · mobile hamburger open→no-select ▸ ____
 
 ---
 
 ## 4. Measurement & validation plan
 
-**Baseline (capture now, before changes)** — homepage, 28d, Desktop/Mobile split:
-- Nav click distribution (Clarity heatmap) · header dead-click & rage-click rates · `Quick back` & `Excessive scrolling` (Data Export) · % sessions using search · homepage→collection CTR · homepage→PDP→**add-to-cart** funnel (GA4).
+**Baseline now (pre-change):** nav click distribution · header dead/rage-click rates · `Quick back`/`Excessive scrolling` by collection · % sessions using search · homepage→collection→PDP→**add-to-cart** funnel (GA4).
 
-**Test:** ship the decluttered nav as an A/B or staged release.
+**Test:** ship the 6-item spine + unified tile labels as an A/B or staged release.
 
-**Success signals (expect):**
-- ↑ click concentration on the primary spine (top items capture a higher share).
-- ↓ Dead clicks & ↓ Rage clicks on the header.
+**Success signals:**
+- ↑ click concentration on the top spine; **Bleed Control & Trauma** captures meaningful share (proof F2 was costing you).
+- ↓ dead clicks & ↓ rage clicks on the header.
 - ↓ `Quick back` from the homepage; ↑ pages/session.
-- ↑ homepage→collection→PDP→**add-to-cart** rate (the conversion that matters).
-- Mobile: ↓ hamburger open→no-select rate; faster time-to-first-product.
+- ↑ homepage→collection→PDP→**add-to-cart** (the conversion that matters).
+- Mobile: ↓ hamburger open→no-select; faster time-to-first-product.
 
-**Guardrail:** verify that demoting collections/content to the footer doesn't tank traffic or organic entries to genuinely important pages — check Clarity/GA before and after.
+**Guardrail:** confirm demoting Books/Simulation into parents doesn't tank traffic/organic entries to those pages — check Clarity/GA before & after.
 
 ---
 
 ## 5. What I can do next (just say which)
 
-- **Wire the data in:** with egress open, auto-pull homepage `Quick back` / `Excessive scrolling` / traffic by URL through the existing `/api/clarity` integration and drop real numbers into §1/§4.
-- **Build the menu:** add the MyMedEquip Shopify theme repo (or paste the header/nav Liquid markup) and I'll implement the decluttered nav — product-led mega-menu + use-case column + mobile accordion — as a concrete diff.
-- **Annotate the live menu:** paste a homepage screenshot and I'll mark up exactly which items to cut / keep / demote against these principles.
+- **Implement it:** add the MyMedEquip Shopify theme repo (or paste the header/nav Liquid + the hero-tiles section) and I'll build the 6-item mega-menu, unified tile labels, and mobile accordion as a concrete diff.
+- **Wire the data in:** open egress to `www.clarity.ms` and I'll auto-pull `Quick back`/`Excessive scrolling`/traffic by collection into §3/§4 via the existing `/api/clarity` integration.
+- **Quick visual:** I can produce an annotated before/after menu mock (labelled keep/cut/demote) for client sign-off.
